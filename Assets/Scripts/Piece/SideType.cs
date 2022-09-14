@@ -1,4 +1,4 @@
-public enum Side 
+public enum SideType
 {
     Black,
     White
