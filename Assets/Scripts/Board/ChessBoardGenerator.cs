@@ -13,6 +13,8 @@ public class ChessBoardGenerator : MonoBehaviour
     [SerializeField] private Vector3 boardCenter = Vector3.zero;
     [SerializeField] private float deathSize = 0.3f;
     [SerializeField] private float deathSpacing = 0.3f;
+    [SerializeField] private float dragOffset = 0.75f;
+    
 
     [Header("Prefabs & Materials")]
     [SerializeField] private GameObject[] prefabs;
@@ -114,6 +116,17 @@ public class ChessBoardGenerator : MonoBehaviour
             {
                 currentlyDragging.SetPosition(GetTileCenter(currentlyDragging.currentX, currentlyDragging.currentY));
                 currentlyDragging = null;
+            }
+        }
+
+        // If we're dragging a picee
+        if (currentlyDragging)
+        {
+            Plane horizontalPlane = new Plane(Vector3.up, Vector3.up * yOffset);
+            float distance = 0.0f;
+            if (horizontalPlane.Raycast(ray, out distance))
+            {
+                currentlyDragging.SetPosition(ray.GetPoint(distance) + Vector3.up * dragOffset);
             }
         }
     }
