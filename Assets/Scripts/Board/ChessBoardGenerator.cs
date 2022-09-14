@@ -68,6 +68,31 @@ public class ChessBoardGenerator : MonoBehaviour
                 tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
             }
 
+            // If we press down on the mouse
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (pieces[hitPosition.x, hitPosition.y] != null)
+                {
+                    if (true)
+                    {
+                        currentlyDragging = pieces[hitPosition.x, hitPosition.y];
+                    }
+                }
+            }
+
+            // If we are releasing the mouse button
+            if (currentlyDragging != null && Input.GetMouseButtonUp(0))
+            {
+                Vector2Int previousPosition = new Vector2Int(currentlyDragging.currentX, currentlyDragging.currentY);
+
+                bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
+                if (!validMove)
+                {
+                    currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
+                    currentlyDragging = null;
+                }
+            }
+
         }
         else 
         {
@@ -178,7 +203,7 @@ public class ChessBoardGenerator : MonoBehaviour
     {
         pieces[x, y].currentX = x;
         pieces[x, y].currentY = y;
-        pieces[x, y].transform.position = GetTileCenter(x, y);
+        pieces[x, y].SetPosition(GetTileCenter(x, y), force);
     }
 
     private Vector3 GetTileCenter(int x, int y)
@@ -187,6 +212,26 @@ public class ChessBoardGenerator : MonoBehaviour
     }
 
     // Operations
+    private bool MoveTo(Piece cp, int x, int y)
+    {
+        Vector2Int previousPosition = new Vector2Int(cp.currentX, cp.currentY);
+
+        if (pieces[x, y] != null)
+        {
+            Piece ocp = pieces[x, y];
+            if (cp.sideType == ocp.sideType)
+            {
+                return false;
+            }
+        }
+
+        pieces[x, y] = cp;
+        pieces[previousPosition.x, previousPosition.y] = null;
+
+        PositioningSinglePiece(x, y);
+
+        return true;
+    }
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
         for (int x = 0; x < TILE_COUNT_X; x++)
