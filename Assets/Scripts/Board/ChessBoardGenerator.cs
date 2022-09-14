@@ -28,6 +28,7 @@ public class ChessBoardGenerator : MonoBehaviour
     {
         GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
         SpawnAllPieces();
+        PositioningAllPieces();
     }
 
     private void Update() 
@@ -162,6 +163,27 @@ public class ChessBoardGenerator : MonoBehaviour
         return piece;
     }
     
+    // Positioning
+    private void PositioningAllPieces()
+    {
+        for (int x = 0; x < TILE_COUNT_X; x++)
+            for (int y = 0; y < TILE_COUNT_Y; y++)
+                if(pieces[x,y] != null)
+                    PositioningSinglePiece(x, y, true);
+    }
+
+    private void PositioningSinglePiece(int x, int y, bool force = false)
+    {
+        pieces[x, y].currentX = x;
+        pieces[x, y].currentY = y;
+        pieces[x, y].transform.position = GetTileCenter(x, y);
+    }
+
+    private Vector3 GetTileCenter(int x, int y)
+    {
+        return new Vector3(x * tileSize, yOffset, y * tileSize) - bounds + new Vector3(tileSize / 2, 0, tileSize / 2);
+    }
+
     // Operations
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
