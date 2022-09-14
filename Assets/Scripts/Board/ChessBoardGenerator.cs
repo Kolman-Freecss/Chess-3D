@@ -17,6 +17,7 @@ public class ChessBoardGenerator : MonoBehaviour
     [SerializeField] private Material[] teamMaterials;
 
     private Piece[,] pieces;
+    private Piece currentlyDragging;
     private const int TILE_COUNT_X = 8;
     private const int TILE_COUNT_Y = 8;
     private GameObject[,] tiles;
@@ -45,7 +46,7 @@ public class ChessBoardGenerator : MonoBehaviour
     private void HighlightTile()
     {
         RaycastHit info;
-        Ray ray = currentCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out info, 100, LayerMask.GetMask("Tile", "Hover")))
         {
@@ -66,6 +67,7 @@ public class ChessBoardGenerator : MonoBehaviour
                 currentHover = hitPosition;
                 tiles[hitPosition.x, hitPosition.y].layer = LayerMask.NameToLayer("Hover");
             }
+
         }
         else 
         {
