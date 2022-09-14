@@ -12,6 +12,10 @@ public class ChessBoardGenerator : MonoBehaviour
     [SerializeField] private float yOffset = 0.2f;
     [SerializeField] private Vector3 boardCenter = Vector3.zero;
 
+    [Header("Prefabs & Materials")]
+    [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private Material[] teamMaterials;
+
     private const int TILE_COUNT_X = 8;
     private const int TILE_COUNT_Y = 8;
     private GameObject[,] tiles;
@@ -22,6 +26,8 @@ public class ChessBoardGenerator : MonoBehaviour
     void Awake()
     {
         GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
+
+        SpawnSinglePiece(PieceType.King, 0);
     }
 
     private void Update() 
@@ -110,6 +116,24 @@ public class ChessBoardGenerator : MonoBehaviour
         return tileObject;
     }
 
+    // Spawning of the pieces
+    private void SpawnAllPieces()
+    {
+
+    }
+
+    private Piece SpawnSinglePiece(PieceType type, int team)
+    {
+        Piece piece = Instantiate(prefabs[(int) type - 1], transform).GetComponent<Piece>();
+        
+        piece.pieceType = type;
+        piece.sideType = team;
+
+        piece.GetComponent<MeshRenderer>().material = teamMaterials[team];
+
+        return piece;
+    }
+    
     // Operations
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
