@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5461287438214259285}
   - component: {fileID: 5454328749646478117}
   - component: {fileID: 5445161644407399659}
-  - component: {fileID: 2094447721347383557}
+  - component: {fileID: 2866164845471428653}
   m_Layer: 0
   m_Name: KnightDark
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2094447721347383557
+--- !u!114 &2866164845471428653
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5458402768047999341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8c35deb369b7c4f9e55368646d4bd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f6df4d7f22acdb4ba33f00b7125f9e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pieceType: 3
+  sideType: 0
+  currentX: 0
+  currentY: 0
