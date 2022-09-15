@@ -31,9 +31,12 @@ public class ChessBoardGenerator : MonoBehaviour
     private Camera currentCamera;
     private Vector2Int currentHover;
     private Vector3 bounds;
+    private bool isWhiteTurn;
 
     void Awake()
     {
+        isWhiteTurn = true;
+
         GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
         SpawnAllPieces();
         PositioningAllPieces();
@@ -80,7 +83,8 @@ public class ChessBoardGenerator : MonoBehaviour
             {
                 if (pieces[hitPosition.x, hitPosition.y] != null)
                 {
-                    if (true)
+                    if ((pieces[hitPosition.x, hitPosition.y].sideType == 0 && isWhiteTurn)
+                        || (pieces[hitPosition.x, hitPosition.y].sideType == 1 && !isWhiteTurn))
                     {
                         currentlyDragging = pieces[hitPosition.x, hitPosition.y];
 
@@ -266,11 +270,9 @@ public class ChessBoardGenerator : MonoBehaviour
         {
             if (moves[i].x == pos.x && moves[i].y == pos.y) 
             {
-                Debug.Log("TRUE");
                 return true;
             }
         }
-        Debug.Log("FALSE");
         return false;
     }
 
@@ -313,6 +315,8 @@ public class ChessBoardGenerator : MonoBehaviour
         pieces[previousPosition.x, previousPosition.y] = null;
 
         PositioningSinglePiece(x, y);
+
+        isWhiteTurn = !isWhiteTurn;
 
         return true;
     }
