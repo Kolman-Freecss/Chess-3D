@@ -14,6 +14,7 @@ public class ChessBoardGenerator : MonoBehaviour
     [SerializeField] private float deathSize = 0.3f;
     [SerializeField] private float deathSpacing = 0.3f;
     [SerializeField] private float dragOffset = 0.75f;
+    [SerializeField] private GameObject victoryScreen;
     
 
     [Header("Prefabs & Materials")]
@@ -263,6 +264,65 @@ public class ChessBoardGenerator : MonoBehaviour
         availableMoves.Clear();
     }
 
+    // Checkmate
+    private void CheckMate(int team)
+    {
+        DisplayVictory(team);
+    }
+
+    private void DisplayVictory(int winningTeam)
+    {
+        victoryScreen.SetActive(true);
+        victoryScreen.transform.GetChild(winningTeam).gameObject.SetActive(true);
+    }
+
+    public void OnResetButton()
+    {
+        // UI
+        victoryScreen.transform.GetChild(0).gameObject.SetActive(false);
+        victoryScreen.transform.GetChild(1).gameObject.SetActive(false);
+        victoryScreen.SetActive(false);
+
+        //Fields reset
+        currentlyDragging = null;
+        availableMoves = new List<Vector2Int>();
+
+        // Clean up
+        for (int x = 0; x < TILE_COUNT_X; x++)
+        {
+            for (int y = 0; y < TILE_COUNT_Y; y++)
+            {
+                if (pieces[x,y] != null)
+                {
+                    Destroy(pieces[x, y].gameObject);
+                }
+                pieces[x, y] = null;
+            }
+        }
+
+        for (int i = 0; i < deadWhites.Count; i++)
+        {
+            Destroy(deadWhites[i].gameObject);
+        }
+        for (int i = 0; i < deadBlacks.Count; i++)
+        {
+            Destroy(deadBlacks[i].gameObject);
+        }
+
+        deadWhites.Clear();
+        deadBlacks.Clear();
+
+        SpawnAllPieces();
+        PositioningAllPieces();
+        isWhiteTurn = true;
+
+    }
+
+    public void OnExitButton()
+    {
+        Application.Quit();
+    }
+    
     // Operations
     private bool ContainsValidMove(ref List<Vector2Int> moves, Vector2 pos)
     {
@@ -291,8 +351,14 @@ public class ChessBoardGenerator : MonoBehaviour
                 return false;
             }
 
+            // If its the enemy team
             if (ocp.sideType == 0)
             {
+                if (ocp.pieceType == PieceType.King)
+                {
+                    CheckMate(1);
+                }
+
                 deadWhites.Add(ocp);
                 ocp.SetScale(Vector3.one * deathSize);
                 ocp.SetPosition(new Vector3 (8 * tileSize, yOffset, -1 * tileSize) 
@@ -302,6 +368,11 @@ public class ChessBoardGenerator : MonoBehaviour
             }
             else
             {
+                if (ocp.pieceType == PieceType.King)
+                {
+                    CheckMate(0);
+                }
+
                 deadBlacks.Add(ocp);
                 ocp.SetScale(Vector3.one * deathSize);
                 ocp.SetPosition(new Vector3 (-1 * tileSize, yOffset, 8 * tileSize) 
