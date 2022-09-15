@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6618004791200011064}
   - component: {fileID: 6602731388206579268}
   - component: {fileID: 6596571247067376152}
-  - component: {fileID: 7214040573865123284}
+  - component: {fileID: 7590984973309002219}
   m_Layer: 0
   m_Name: QueenDark
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7214040573865123284
+--- !u!114 &7590984973309002219
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6619204010857047224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8c35deb369b7c4f9e55368646d4bd0, type: 3}
+  m_Script: {fileID: 11500000, guid: f6dfd8d10d4678d4fba9a6d59b6f01fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieceType: 4
+  pieceType: 5
+  sideType: 0
+  currentX: 0
+  currentY: 0

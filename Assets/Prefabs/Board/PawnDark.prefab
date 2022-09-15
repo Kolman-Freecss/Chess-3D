@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7336607546817865126}
   - component: {fileID: 7328546447837482920}
   - component: {fileID: 7319448635341485558}
-  - component: {fileID: 4624050150371560963}
+  - component: {fileID: 6374409950184156986}
   m_Layer: 0
   m_Name: PawnDark
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4624050150371560963
+--- !u!114 &6374409950184156986
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7334104785539404728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8c35deb369b7c4f9e55368646d4bd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 28e7dbe43a2d7ff4d8873de6492dbb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieceType: 0
+  pieceType: 1
+  sideType: 0
+  currentX: 0
+  currentY: 0

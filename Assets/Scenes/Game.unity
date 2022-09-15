@@ -250,6 +250,10 @@ PrefabInstance:
       value: Board
       objectReference: {fileID: 0}
     - target: {fileID: 2171686035674319249, guid: 7eeae446ea0cacd43812a322a7801221, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2171686035674319249, guid: 7eeae446ea0cacd43812a322a7801221, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}

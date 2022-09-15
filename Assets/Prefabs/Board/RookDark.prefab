@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6024648934020898219}
   - component: {fileID: 6049247557186824727}
   - component: {fileID: 6042126414636530479}
-  - component: {fileID: 4326126749902288404}
+  - component: {fileID: 7478492923609085897}
   m_Layer: 0
   m_Name: RookDark
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4326126749902288404
+--- !u!114 &7478492923609085897
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6021084926422287875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be8c35deb369b7c4f9e55368646d4bd0, type: 3}
+  m_Script: {fileID: 11500000, guid: d802aad01ccb6224ab8c806f9a0f08e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieceType: 5
+  pieceType: 2
+  sideType: 0
+  currentX: 0
+  currentY: 0

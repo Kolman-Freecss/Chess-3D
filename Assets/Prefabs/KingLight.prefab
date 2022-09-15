@@ -96,4 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be8c35deb369b7c4f9e55368646d4bd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieceType: 2
+  pieceType: 6
+  sideType: 0
+  currentX: 0
+  currentY: 0
