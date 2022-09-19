@@ -4,15 +4,40 @@ using UnityEngine;
 
 public class GameUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameUI Instance { get; set; }
+
+    private void Awake() 
     {
-        
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnLocalGameButton()
     {
-        
+        Debug.Log("Local Game Button Clicked");
+    }
+
+    public void OnOnlineGameButton()
+    {
+        Debug.Log("Online Game Button Clicked");
+    }
+    
+    public void OnOnlineHostButton()
+    {
+        Debug.Log("Online Host Button Clicked");
+    }
+
+    public void OnOnlineConnectButton()
+    {
+        Debug.Log("Online Connect Button Clicked");
+    }
+
+    public void OnOnlineBackButton()
+    {
+        Debug.Log("Online Back Button Clicked");
+    }
+
+    public void OnHostBackButton()
+    {
+        Debug.Log("Host Back Button Clicked");
     }
 }
