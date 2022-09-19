@@ -37,6 +37,7 @@ public class ChessBoardGenerator : MonoBehaviour
     void Awake()
     {
         isWhiteTurn = true;
+        victoryScreen.SetActive(false);
 
         GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
         SpawnAllPieces();
