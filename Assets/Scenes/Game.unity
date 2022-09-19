@@ -779,6 +779,7 @@ MonoBehaviour:
   server: {fileID: 311433046}
   client: {fileID: 311433045}
   menuAnimator: {fileID: 311433044}
+  addressInput: {fileID: 458767322}
 --- !u!95 &311433044
 Animator:
   serializedVersion: 4
