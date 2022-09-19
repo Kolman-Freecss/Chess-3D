@@ -669,6 +669,7 @@ GameObject:
   - component: {fileID: 311433040}
   - component: {fileID: 311433039}
   - component: {fileID: 311433043}
+  - component: {fileID: 311433044}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -773,6 +774,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2926a47a8356774fbf82e5e27931b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuAnimator: {fileID: 311433044}
+--- !u!95 &311433044
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311433038}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0f10a9aa12517c149b2707caf3c158ee, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &372506135
 GameObject:
   m_ObjectHideFlags: 0
@@ -4081,6 +4103,7 @@ GameObject:
   - component: {fileID: 1903454363}
   - component: {fileID: 1903454362}
   - component: {fileID: 1903454361}
+  - component: {fileID: 1903454364}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -4155,7 +4178,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 311433043}
         m_TargetAssemblyTypeName: GameUI, Assembly-CSharp
-        m_MethodName: OnOnlineBackButton
+        m_MethodName: OnHostBackButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4203,6 +4226,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903454359}
   m_CullTransparentMesh: 1
+--- !u!95 &1903454364
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903454359}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 64b0371dfb5dc974c85eb6f9f1c68101, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1912818374
 GameObject:
   m_ObjectHideFlags: 0

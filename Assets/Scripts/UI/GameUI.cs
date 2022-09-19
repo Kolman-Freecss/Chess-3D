@@ -6,6 +6,8 @@ public class GameUI : MonoBehaviour
 {
     public static GameUI Instance { get; set; }
 
+    [SerializeField] private Animator menuAnimator;
+
     private void Awake() 
     {
         Instance = this;
@@ -13,31 +15,31 @@ public class GameUI : MonoBehaviour
 
     public void OnLocalGameButton()
     {
-        Debug.Log("Local Game Button Clicked");
+        menuAnimator.SetTrigger("InGameMenu");
     }
 
     public void OnOnlineGameButton()
     {
-        Debug.Log("Online Game Button Clicked");
+        menuAnimator.SetTrigger("OnlineMenu");
     }
     
     public void OnOnlineHostButton()
     {
-        Debug.Log("Online Host Button Clicked");
+        menuAnimator.SetTrigger("HostMenu");
     }
 
     public void OnOnlineConnectButton()
     {
-        Debug.Log("Online Connect Button Clicked");
+        Debug.Log("Online Connect Button Clicked"); // $$
     }
 
     public void OnOnlineBackButton()
     {
-        Debug.Log("Online Back Button Clicked");
+        menuAnimator.SetTrigger("StartMenu");
     }
 
     public void OnHostBackButton()
     {
-        Debug.Log("Host Back Button Clicked");
+        menuAnimator.SetTrigger("OnlineMenu");
     }
 }
