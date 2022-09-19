@@ -85,7 +85,7 @@ public class Client : MonoBehaviour
                     //SendToServer(new NetWelcome());
                     break;
                 case NetworkEvent.Type.Data:
-                    //HandleData(stream);
+                    NetUtility.OnData(stream, default(NetworkConnection));
                     break;
                 case NetworkEvent.Type.Disconnect:
                     Debug.Log("Disconnected from server");
@@ -101,19 +101,19 @@ public class Client : MonoBehaviour
     {
         DataStreamWriter writer;
         driver.BeginSend(connection, out writer);
-        //msg.Serialize(ref writer);
+        msg.Serialize(ref writer);
         driver.EndSend(writer);
     }
 
     //Event parsing
     private void RegisterToEvent()
     {
-        throw new NotImplementedException();
+        NetUtility.C_KEEP_ALIVE += OnKeepAlive;
     }
 
     private void UnregisterFromEvent()
     {
-        throw new NotImplementedException();
+        NetUtility.C_KEEP_ALIVE -= OnKeepAlive;
     }
 
     private void OnKeepAlive(NetMessage msg)
