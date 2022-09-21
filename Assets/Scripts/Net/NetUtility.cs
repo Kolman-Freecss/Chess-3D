@@ -17,17 +17,20 @@ public static class NetUtility
     {
         NetMessage msg = null;
         OpCode code = (OpCode)stream.ReadByte();
+        Debug.Log("Received NetUtility OpCode: " + code);
         switch (code)
         {
             case OpCode.KEEP_ALIVE:
                 msg = new NetKeepAlive(stream);
                 break;
-         /*   case OpCode.WELCOME:
+            case OpCode.WELCOME:
                 msg = new NetWelcome(stream);
                 break;
+                
             case OpCode.START_GAME:
                 msg = new NetStartGame(stream);
                 break;
+                /*
             case OpCode.MAKE_MOVE:
                 msg = new NetMakeMove(stream);
                 break;

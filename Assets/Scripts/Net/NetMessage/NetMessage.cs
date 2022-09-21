@@ -1,7 +1,6 @@
 using Unity.Networking.Transport;
-using UnityEngine;
 
-public class NetMessage : MonoBehaviour
+public class NetMessage
 {
     public OpCode Code { get; set; }
 
@@ -10,19 +9,17 @@ public class NetMessage : MonoBehaviour
         writer.WriteByte((byte)Code);
     }
 
-    public virtual void Deserialize(ref DataStreamReader reader)
+    public virtual void Deserialize(DataStreamReader reader)
     {
         Code = (OpCode)reader.ReadByte();
     }
 
     public virtual void ReceivedOnClient()
     {
-        Debug.Log("Received on client");
     }
 
     public virtual void ReceivedOnServer(NetworkConnection connection)
     {
-        Debug.Log("Received on server");
     }
 
 }

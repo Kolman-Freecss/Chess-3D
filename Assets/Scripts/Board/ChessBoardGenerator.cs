@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Networking.Transport;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,6 +35,10 @@ public class ChessBoardGenerator : MonoBehaviour
     private Vector3 bounds;
     private bool isWhiteTurn;
 
+    // Multiplayer stuff
+    private int playerCount = -1;
+    private int currentTeam = -1;
+
     void Awake()
     {
         isWhiteTurn = true;
@@ -42,6 +47,8 @@ public class ChessBoardGenerator : MonoBehaviour
         GenerateAllTiles(tileSize, TILE_COUNT_X, TILE_COUNT_Y);
         SpawnAllPieces();
         PositioningAllPieces();
+
+        RegisterEvents();
     }
 
     private void Update() 
@@ -401,4 +408,57 @@ public class ChessBoardGenerator : MonoBehaviour
 
         return -Vector2Int.one; // Invalid
     }
+
+    #region 
+
+    private void RegisterEvents()
+    {
+        NetUtility.S_WELCOME += OnWelcomeServer;
+
+        NetUtility.C_WELCOME += OnWelcomeClient;
+        NetUtility.C_START_GAME += OnStartGameClient;
+    }
+
+    private void UnregisterEvents()
+    {
+    }
+
+    // Server
+    private void OnWelcomeServer(NetMessage msg, NetworkConnection cnn)
+    {
+        NetWelcome netWelcome = msg as NetWelcome;
+
+        // Assign a team
+        netWelcome.AssignedTeam = ++playerCount;
+
+        // Return back to the client
+        Server.Instance.SendToClient(cnn, netWelcome);
+
+        if (playerCount == 1)
+        {
+            // Start the game
+            Server.Instance.Broadcast(new NetStartGame());
+        }
+    }
+
+    //Client
+    private void OnWelcomeClient(NetMessage msg)
+    {
+        NetWelcome netWelcome = msg as NetWelcome;
+
+        // Assign a team
+        currentTeam = netWelcome.AssignedTeam;
+
+        Debug.Log("Assigned Team: " + currentTeam);
+
+    }
+
+    private void OnStartGameClient(NetMessage obj)
+    {
+        GameUI.Instance.SetCameraAngle((currentTeam == 0) ? CameraAngles.whiteTeam : CameraAngles.blackTeam);
+    }
+
+    
+
+    #endregion
 }

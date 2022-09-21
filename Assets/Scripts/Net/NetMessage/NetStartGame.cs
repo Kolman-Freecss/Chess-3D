@@ -1,16 +1,16 @@
 using Unity.Networking.Transport;
 
-public class NetKeepAlive : NetMessage
+public class NetStartGame : NetMessage
 {
-    public NetKeepAlive()
+    public NetStartGame()
     {
-        Code = OpCode.KEEP_ALIVE;
+        Code = OpCode.START_GAME;
     }
 
-    public NetKeepAlive(DataStreamReader stream)
+    public NetStartGame(DataStreamReader reader)
     {
-        Code = OpCode.KEEP_ALIVE;
-        Deserialize(stream);
+        Code = OpCode.START_GAME;
+        Deserialize(reader);
     }
 
     public override void Serialize(ref DataStreamWriter writer)
@@ -20,16 +20,16 @@ public class NetKeepAlive : NetMessage
 
     public override void Deserialize(DataStreamReader reader)
     {
-        //Code = (OpCode)reader.ReadByte();
     }
 
     public override void ReceivedOnClient()
     {
-        NetUtility.C_KEEP_ALIVE?.Invoke(this);
+        NetUtility.C_START_GAME?.Invoke(this);
     }
 
     public override void ReceivedOnServer(NetworkConnection connection)
     {
-        NetUtility.S_KEEP_ALIVE?.Invoke(this, connection);
+        NetUtility.S_START_GAME?.Invoke(this, connection);
     }
+    
 }

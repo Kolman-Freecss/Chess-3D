@@ -78,22 +78,24 @@ public class Client : MonoBehaviour
         NetworkEvent.Type cmd;
         while ((cmd = connection.PopEvent(driver, out stream)) != NetworkEvent.Type.Empty)
         {
-            switch (cmd)
+            Debug.Log("Received event " + cmd);
+            if (cmd == NetworkEvent.Type.Connect)
             {
-                case NetworkEvent.Type.Connect:
-                    Debug.Log("Connected to server");
-                    //SendToServer(new NetWelcome());
-                    break;
-                case NetworkEvent.Type.Data:
-                    NetUtility.OnData(stream, default(NetworkConnection));
-                    break;
-                case NetworkEvent.Type.Disconnect:
-                    Debug.Log("Disconnected from server");
-                    connection = default(NetworkConnection);
-                    connectionDropped?.Invoke();
-                    Shutdown();
-                    break;
+                SendToServer(new NetWelcome());
+                Debug.Log("Connected to server");
             }
+            else if (cmd == NetworkEvent.Type.Data)
+            {
+                NetUtility.OnData(stream, default(NetworkConnection));
+            }
+            else if (cmd == NetworkEvent.Type.Disconnect)
+            {
+                Debug.Log("Disconnected from server");
+                connection = default(NetworkConnection);
+                connectionDropped?.Invoke();
+                Shutdown();
+            }
+            
         }
     }
 
