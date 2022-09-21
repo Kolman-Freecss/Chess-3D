@@ -38,8 +38,9 @@ public class ChessBoardGenerator : MonoBehaviour
     // Multiplayer stuff
     private int playerCount = -1;
     private int currentTeam = -1;
+    private bool localGame = true;
 
-    void Awake()
+    void Start()
     {
         isWhiteTurn = true;
         victoryScreen.SetActive(false);
@@ -92,8 +93,8 @@ public class ChessBoardGenerator : MonoBehaviour
             {
                 if (pieces[hitPosition.x, hitPosition.y] != null)
                 {
-                    if ((pieces[hitPosition.x, hitPosition.y].sideType == 0 && isWhiteTurn)
-                        || (pieces[hitPosition.x, hitPosition.y].sideType == 1 && !isWhiteTurn))
+                    if ((pieces[hitPosition.x, hitPosition.y].sideType == 0 && isWhiteTurn && currentTeam == 0)
+                        || (pieces[hitPosition.x, hitPosition.y].sideType == 1 && !isWhiteTurn && currentTeam == 1))
                     {
                         currentlyDragging = pieces[hitPosition.x, hitPosition.y];
 
@@ -397,6 +398,11 @@ public class ChessBoardGenerator : MonoBehaviour
 
         isWhiteTurn = !isWhiteTurn;
 
+        if (localGame)
+        {
+            currentTeam = (currentTeam == 0) ? 1 : 0;
+        }
+
         return true;
     }
     private Vector2Int LookupTileIndex(GameObject hitInfo)
@@ -417,10 +423,18 @@ public class ChessBoardGenerator : MonoBehaviour
 
         NetUtility.C_WELCOME += OnWelcomeClient;
         NetUtility.C_START_GAME += OnStartGameClient;
+
+        GameUI.Instance.SetLocalGame += OnSetLocalGame;
     }
 
     private void UnregisterEvents()
     {
+        NetUtility.S_WELCOME -= OnWelcomeServer;
+
+        NetUtility.C_WELCOME -= OnWelcomeClient;
+        NetUtility.C_START_GAME -= OnStartGameClient;
+
+        GameUI.Instance.SetLocalGame -= OnSetLocalGame;
     }
 
     // Server
@@ -451,6 +465,11 @@ public class ChessBoardGenerator : MonoBehaviour
 
         Debug.Log("Assigned Team: " + currentTeam);
 
+        if (localGame && currentTeam == 0)
+        {
+            Server.Instance.Broadcast(new NetStartGame());
+        }
+
     }
 
     private void OnStartGameClient(NetMessage obj)
@@ -458,7 +477,12 @@ public class ChessBoardGenerator : MonoBehaviour
         GameUI.Instance.SetCameraAngle((currentTeam == 0) ? CameraAngles.whiteTeam : CameraAngles.blackTeam);
     }
 
+    private void OnSetLocalGame(bool obj)
+    {
+        localGame = obj;
+    }
     
 
     #endregion
+    
 }
