@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Networking.Transport;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class ChessBoardGenerator : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class ChessBoardGenerator : MonoBehaviour
     [SerializeField] private float dragOffset = 0.75f;
     [SerializeField] private GameObject victoryScreen;
     [SerializeField] private Transform rematchIndicator;
+    [SerializeField] private Button rematchButton;
     
 
     [Header("Prefabs & Materials")]
@@ -328,6 +330,9 @@ public class ChessBoardGenerator : MonoBehaviour
     public void GameReset()
     {
          // UI
+
+        rematchButton.interactable = true;
+
         rematchIndicator.transform.GetChild(0).gameObject.SetActive(false);
         rematchIndicator.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -380,8 +385,7 @@ public class ChessBoardGenerator : MonoBehaviour
         GameReset();
         GameUI.Instance.OnLeaveFromGameMenu();
 
-        Client.Instance.Shutdown();
-        Server.Instance.Shutdown();
+        Invoke("ShutdownRelay", 1.0f);
 
         //Reset some values
         playerCount = -1;
@@ -581,6 +585,10 @@ public class ChessBoardGenerator : MonoBehaviour
         if (netMakeMove.teamId != currentTeam)
         {
             rematchIndicator.transform.GetChild((netMakeMove.wantRematch == 1) ? 0 : 1).gameObject.SetActive(true);
+            if (netMakeMove.wantRematch != 1)
+            {
+                rematchButton.interactable = false;
+            }
         }
 
         if (playerRematch[0] && playerRematch[1])
@@ -597,10 +605,16 @@ public class ChessBoardGenerator : MonoBehaviour
 
     private void OnSetLocalGame(bool obj)
     {
+        playerCount = -1;
+        currentTeam = -1;
         localGame = obj;
     }
     
-
+    private void ShutdownRelay()
+    {
+        Client.Instance.Shutdown();
+        Server.Instance.Shutdown();
+    }
     #endregion
     
 }
