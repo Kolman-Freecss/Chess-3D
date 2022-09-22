@@ -110,12 +110,25 @@ public class ChessBoardGenerator : MonoBehaviour
             {
                 Vector2Int previousPosition = new Vector2Int(currentlyDragging.currentX, currentlyDragging.currentY);
 
-                bool validMove = MoveTo(currentlyDragging, hitPosition.x, hitPosition.y);
-                
-                if (!validMove)
+                if(ContainsValidMove(ref availableMoves, new Vector2(hitPosition.x,hitPosition.y)))
+                {
+                    MoveTo(previousPosition.x, previousPosition.y, hitPosition.x, hitPosition.y);
+
+                    // Net implementation
+                    NetMakeMove mm = new NetMakeMove();
+                    mm.originalX = previousPosition.x;
+                    mm.originalY = previousPosition.y;
+                    mm.destinationX = hitPosition.x;
+                    mm.destinationY = hitPosition.y;
+                    mm.teamId = currentTeam;
+                    Client.Instance.SendToServer(mm);
+                }
+                else
+                {
                     currentlyDragging.SetPosition(GetTileCenter(previousPosition.x, previousPosition.y));
-                currentlyDragging = null;
-                RemoveHighlightTiles();
+                    currentlyDragging = null;
+                    RemoveHighlightTiles();
+                }
             }
 
         }
@@ -345,19 +358,17 @@ public class ChessBoardGenerator : MonoBehaviour
         return false;
     }
 
-    private bool MoveTo(Piece cp, int x, int y)
+    private void MoveTo(int originalX, int originalY, int x, int y)
     {
-        if(!ContainsValidMove(ref availableMoves, new Vector2(x,y)))
-            return false;
-
-        Vector2Int previousPosition = new Vector2Int(cp.currentX, cp.currentY);
+        Piece cp = pieces[originalX, originalY];
+        Vector2Int previousPosition = new Vector2Int(originalX, originalY);
 
         if (pieces[x, y] != null)
         {
             Piece ocp = pieces[x, y];
             if (cp.sideType == ocp.sideType)
             {
-                return false;
+                return;
             }
 
             // If its the enemy team
@@ -403,7 +414,11 @@ public class ChessBoardGenerator : MonoBehaviour
             currentTeam = (currentTeam == 0) ? 1 : 0;
         }
 
-        return true;
+        if (currentlyDragging)
+            currentlyDragging = null;
+        RemoveHighlightTiles();
+
+        return;
     }
     private Vector2Int LookupTileIndex(GameObject hitInfo)
     {
@@ -420,9 +435,11 @@ public class ChessBoardGenerator : MonoBehaviour
     private void RegisterEvents()
     {
         NetUtility.S_WELCOME += OnWelcomeServer;
+        NetUtility.S_MAKE_MOVE += OnMakeMoveServer;
 
         NetUtility.C_WELCOME += OnWelcomeClient;
         NetUtility.C_START_GAME += OnStartGameClient;
+        NetUtility.C_MAKE_MOVE += OnMakeMoveClient;
 
         GameUI.Instance.SetLocalGame += OnSetLocalGame;
     }
@@ -430,9 +447,11 @@ public class ChessBoardGenerator : MonoBehaviour
     private void UnregisterEvents()
     {
         NetUtility.S_WELCOME -= OnWelcomeServer;
+        NetUtility.S_MAKE_MOVE -= OnMakeMoveServer;
 
         NetUtility.C_WELCOME -= OnWelcomeClient;
         NetUtility.C_START_GAME -= OnStartGameClient;
+        NetUtility.C_MAKE_MOVE -= OnMakeMoveClient;
 
         GameUI.Instance.SetLocalGame -= OnSetLocalGame;
     }
@@ -455,6 +474,18 @@ public class ChessBoardGenerator : MonoBehaviour
         }
     }
 
+    private void OnMakeMoveServer(NetMessage msg, NetworkConnection cnn)
+    {
+        NetMakeMove netMakeMove = msg as NetMakeMove;
+
+        // Move the piece
+        //MoveTo(netMakeMove.OriginalX, netMakeMove.OriginalY, netMakeMove.X, netMakeMove.Y);
+
+        // Broadcast the move
+        Server.Instance.Broadcast(netMakeMove);
+
+    }
+
     //Client
     private void OnWelcomeClient(NetMessage msg)
     {
@@ -470,6 +501,23 @@ public class ChessBoardGenerator : MonoBehaviour
             Server.Instance.Broadcast(new NetStartGame());
         }
 
+    }
+
+    private void OnMakeMoveClient(NetMessage msg)
+    {
+        NetMakeMove netMakeMove = msg as NetMakeMove;
+
+        Debug.Log("Received Move: " + netMakeMove.originalX + ", " + netMakeMove.originalY + " to " + netMakeMove.destinationX + ", " + netMakeMove.destinationY);
+        if (netMakeMove.teamId != currentTeam)
+        {
+            Piece taget = pieces[netMakeMove.originalX, netMakeMove.originalY];
+
+            availableMoves = taget.GetAvailableMoves(ref pieces, TILE_COUNT_X, TILE_COUNT_Y);
+            //specialMove = taget.GetSpecialMove(ref pieces, ref moveList, ref availableMoves);
+
+            // Move the piece
+            MoveTo(netMakeMove.originalX, netMakeMove.originalY, netMakeMove.destinationX, netMakeMove.destinationY);
+        }
     }
 
     private void OnStartGameClient(NetMessage obj)
